@@ -2,6 +2,7 @@ from utils import *
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
 
 def exercise1():
     params = {
@@ -11,7 +12,6 @@ def exercise1():
         3: {MEAN: [6, 6], STD: 0.8},
         }
     
-    np.random.seed(42)
     X = []
     y = []
 
@@ -38,8 +38,40 @@ def exercise1():
     plt.grid(True, alpha=0.3)
     plt.savefig(os.path.join(OUTPUTS_FILE_PATH,'exercise1.png'))
 
+def exercise2():
+    params = {
+        'A' : {MEAN : [0,0,0,0,0], COV : [[1,0.8,0.1,0,0],[0.8,1,0.3,0,0],[0.1,0.3,1,0.5,0],[0,0,0.5,1,0.2],[0,0,0,0.2,1.0]]},
+        'B' : {MEAN : [1.5,1.5,1.5,1.5,1.5], COV : [[1.5,-0.7,0.2,0,0],[-0.7,1.5,0.4,0,0],[0.2,0.4,1.5,0.6,0],[0,0,0.6,1.5,0.3],[0,0,0,0.3,1.5]]}
+    }
+
+    cls_A = np.random.multivariate_normal(params['A'][MEAN], params['A'][COV], 500)
+    cls_B = np.random.multivariate_normal(params['B'][MEAN], params['B'][COV], 500)
+
+    labels_A = np.zeros(500)
+    labels_B = np.ones(500)
+
+    X = np.vstack((cls_A, cls_B))
+    y = np.hstack((labels_A, labels_B))
+    pca = PCA(n_components=2)
+    X_pca = pca.fit_transform(X)
+
+    # Scatter plot
+    plt.figure(figsize=(8,6))
+    plt.scatter(X_pca[y==0, 0], X_pca[y==0, 1], label='Classe A', alpha=0.7)
+    plt.scatter(X_pca[y==1, 0], X_pca[y==1, 1], label='Classe B', alpha=0.7)
+    plt.xlabel('PC1')
+    plt.ylabel('PC2')
+    plt.legend()
+    plt.savefig(os.path.join(OUTPUTS_FILE_PATH,'exercise2.png'))
+
+def exercise3():
+    pass
+
 def main():
     exercise1()
+    exercise2()
+    exercise3()
 
 if __name__ == "__main__":
+    np.random.seed(42)
     main()

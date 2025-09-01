@@ -1,0 +1,27 @@
+name: github pages deploy
+on:
+  - push
+  - pull_request
+  
+env:
+  CI: true
+  PYTHON_VERSION: 3.12
+
+jobs:
+     
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - run: |
+          pip install -r requirements.txt
+          
+      - run: |
+          mkdocs gh-deploy --force

@@ -108,13 +108,6 @@ markdown_extensions:
 
 plugins:
   - glightbox
-  - git-revision-date-localized:
-      enable_creation_date: true
-  - git-authors
-  - git-committers:
-      repository: insper/ann-dl
-      branch: main
-      token: !ENV MKDOCS_GIT_COMMITTERS_APIKEY
   - search
   - minify:
       minify_html: true
@@ -140,4 +133,4 @@ extra_css:
 
 nav:
   - Exercises:
-    - 1. Data: ./docs/data/main.md
+    - 1. Data: pages/data/main.md

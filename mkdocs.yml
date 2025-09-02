@@ -132,5 +132,12 @@ extra_css:
   - assets/stylesheets/extra.css
 
 nav:
-  - Exercises:
-    - 1. Data: pages/data/main.md
+  - Home: index.md
+  - Content:
+    - 1. Data: 
+      - Exploring Class Separability in 2D:
+          pages/data/exercise1.md
+      - Non-Linearity in Higher Dimensions:
+          pages/data/exercise2.md
+
+        

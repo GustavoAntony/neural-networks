@@ -66,7 +66,63 @@ def exercise2():
     plt.savefig(os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise2.png'))
 
 def exercise3():
-    pass
+    import pandas as pd
+    from sklearn.preprocessing import StandardScaler
+
+    # Load dataset
+    df = pd.read_csv(r"c:/Users/gusta/RedesNeurais/neural-networks/data/data/spaceship_tiranic/train.csv")
+
+    # Describe the Data
+    print("Objective: Predict if a passenger was transported to another dimension (Transported column).\n")
+    print("Features:")
+    print("Numerical: Age, RoomService, FoodCourt, ShoppingMall, Spa, VRDeck")
+    print("Categorical: HomePlanet, CryoSleep, Destination, VIP, Cabin, Name")
+
+    # Investigate missing values
+    print("\nMissing values per column:")
+    print(df.isnull().sum())
+
+    # Preprocess the Data
+    numerical_cols = ['Age', 'RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck']
+    categorical_cols = ['HomePlanet', 'CryoSleep', 'Destination', 'VIP', 'Cabin', 'Name']
+
+    # Handle missing data
+    for col in numerical_cols:
+        df[col].fillna(df[col].median(), inplace=True)
+    for col in categorical_cols:
+        df[col].fillna(df[col].mode()[0], inplace=True)
+
+    # Encode categorical features
+    df = pd.get_dummies(df, columns=categorical_cols)
+
+    # Normalize/Standardize numerical features
+    scaler = StandardScaler()
+    df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
+
+    # Visualize the Results
+    import matplotlib.pyplot as plt
+    # Before scaling (using original data)
+    df_raw = pd.read_csv(r"c:/Users/gusta/RedesNeurais/neural-networks/data/data/spaceship_tiranic/train.csv")
+    plt.figure(figsize=(10,4))
+    plt.subplot(1,2,1)
+    df_raw['Age'].hist(alpha=0.7, color='blue')
+    plt.title('Age Before Scaling')
+    plt.subplot(1,2,2)
+    df['Age'].hist(alpha=0.7, color='green')
+    plt.title('Age After Scaling')
+    plt.tight_layout()
+    plt.savefig(os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise3_age_hist.png'))
+
+    # FoodCourt
+    plt.figure(figsize=(10,4))
+    plt.subplot(1,2,1)
+    df_raw['FoodCourt'].hist(alpha=0.7, color='blue')
+    plt.title('FoodCourt Before Scaling')
+    plt.subplot(1,2,2)
+    df['FoodCourt'].hist(alpha=0.7, color='green')
+    plt.title('FoodCourt After Scaling')
+    plt.tight_layout()
+    plt.savefig(os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise3_foodcourt_hist.png'))
 
 def main():
     exercise1()

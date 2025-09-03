@@ -3,6 +3,10 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
+import pandas as pd
+pd.set_option('future.no_silent_downcasting', True)
+import dataframe_image as dfi
+from sklearn.preprocessing import MinMaxScaler
 
 def exercise1():
     params = {
@@ -39,6 +43,7 @@ def exercise1():
     plt.plot([2.0, 4.5], [12.5, -0.2], color='black', linestyle='--', linewidth=2, label="Boundary 1-2")
     plt.plot([11.5, 11.5], [-2, 14], color='black', linestyle='--', linewidth=2, label="Boundary 2-3")
     plt.savefig(os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise1_3.png'))
+    plt.close()
 
 def exercise2():
     params = {
@@ -64,65 +69,56 @@ def exercise2():
     plt.ylabel('PC2')
     plt.legend()
     plt.savefig(os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise2.png'))
+    plt.close()
 
 def exercise3():
-    import pandas as pd
-    from sklearn.preprocessing import StandardScaler
+    df = pd.read_csv(os.path.join(DATA_OUTPUTS_FILE_PATH,'data','spaceship_titanic','train.csv'))
+    df_head = df.head(5)
+    dfi.export(df_head, os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise3_1.png'))
 
-    # Load dataset
-    df = pd.read_csv(r"c:/Users/gusta/RedesNeurais/neural-networks/data/data/spaceship_tiranic/train.csv")
+    numerical_features = ['Age', 'RoomService','FoodCourt','ShoppingMall', 'Spa', 'VRDeck']
+    categorical_features = ['HomePlanet','CryoSleep','Destination','VIP']
+    special_columns = ['Name', 'Cabin', 'PassengerId']
+    target_column = 'Transported'
 
-    # Describe the Data
-    print("Objective: Predict if a passenger was transported to another dimension (Transported column).\n")
-    print("Features:")
-    print("Numerical: Age, RoomService, FoodCourt, ShoppingMall, Spa, VRDeck")
-    print("Categorical: HomePlanet, CryoSleep, Destination, VIP, Cabin, Name")
-
-    # Investigate missing values
-    print("\nMissing values per column:")
+    df.info()
     print(df.isnull().sum())
 
-    # Preprocess the Data
-    numerical_cols = ['Age', 'RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck']
-    categorical_cols = ['HomePlanet', 'CryoSleep', 'Destination', 'VIP', 'Cabin', 'Name']
+    df.drop(columns=['Name', 'PassengerId'], inplace=True)
+    df[['Cabin_Deck', 'Cabin_Side']] = df['Cabin'].str.extract(r'([A-Z]+)\/\d+\/([A-Z]+)')
+    df.drop(columns=['Cabin'], inplace=True)
 
-    # Handle missing data
-    for col in numerical_cols:
-        df[col].fillna(df[col].median(), inplace=True)
-    for col in categorical_cols:
-        df[col].fillna(df[col].mode()[0], inplace=True)
+    categorical_features.append('Cabin_Side')
+    categorical_features.append('Cabin_Deck')
 
-    # Encode categorical features
-    df = pd.get_dummies(df, columns=categorical_cols)
+    for col in numerical_features:
+        df[col] = df[col].fillna(df[col].median())
+    for col in categorical_features:
+        df[col] = df[col].fillna(df[col].mode()[0])
 
-    # Normalize/Standardize numerical features
-    scaler = StandardScaler()
-    df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
+    df_encoded = pd.get_dummies(df[categorical_features], drop_first=True)
 
-    # Visualize the Results
-    import matplotlib.pyplot as plt
-    # Before scaling (using original data)
-    df_raw = pd.read_csv(r"c:/Users/gusta/RedesNeurais/neural-networks/data/data/spaceship_tiranic/train.csv")
-    plt.figure(figsize=(10,4))
-    plt.subplot(1,2,1)
-    df_raw['Age'].hist(alpha=0.7, color='blue')
-    plt.title('Age Before Scaling')
-    plt.subplot(1,2,2)
-    df['Age'].hist(alpha=0.7, color='green')
-    plt.title('Age After Scaling')
+    scaler = MinMaxScaler(feature_range=(-1, 1))
+    df_scaled = pd.DataFrame(scaler.fit_transform(df[numerical_features]), columns=numerical_features)
+
+    df_processed = pd.concat([df_scaled, df_encoded], axis=1)
+    df_processed[target_column] = df[target_column].astype(int) 
+    
+    df_processed_head = df_processed.head(5)
+    dfi.export(df_processed_head, os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise3_2.png'))
+
+    fig, axes = plt.subplots(2, len(numerical_features), figsize=(20, 8))
+    for i, col in enumerate(numerical_features):
+        df[col].plot.hist(bins=30, ax=axes[0, i], alpha=0.7, color='skyblue')
+        axes[0, i].set_title(f"{col} (Before Scaling)")
+        df_scaled[col].plot.hist(bins=30, ax=axes[1, i], alpha=0.7, color='salmon')
+        axes[1, i].set_title(f"{col} (After Scaling)")
+
     plt.tight_layout()
-    plt.savefig(os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise3_age_hist.png'))
+    plt.suptitle("Histograms of Numerical Features (Before and After Scaling)", y=1.02)
+    plt.savefig(os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise3_4.png'))
+    plt.close()
 
-    # FoodCourt
-    plt.figure(figsize=(10,4))
-    plt.subplot(1,2,1)
-    df_raw['FoodCourt'].hist(alpha=0.7, color='blue')
-    plt.title('FoodCourt Before Scaling')
-    plt.subplot(1,2,2)
-    df['FoodCourt'].hist(alpha=0.7, color='green')
-    plt.title('FoodCourt After Scaling')
-    plt.tight_layout()
-    plt.savefig(os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise3_foodcourt_hist.png'))
 
 def main():
     exercise1()

@@ -81,3 +81,7 @@ Encode categorical features
 ```
 
 ## Visualize the Results
+
+![Image1](../../assets/images/data/exercise3_1.png)
+![Image2](../../assets/images/data/exercise3_2.png)
+![Image3](../../assets/images/data/exercise3_4.png)

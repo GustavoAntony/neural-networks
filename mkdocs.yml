@@ -139,5 +139,7 @@ nav:
           pages/data/exercise1.md
       - Non-Linearity in Higher Dimensions:
           pages/data/exercise2.md
+      - Preparing Real-World Data for a Neural Network:
+          pages/data/exercise3.md
 
         

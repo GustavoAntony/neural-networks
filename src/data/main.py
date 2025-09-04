@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 import pandas as pd
 pd.set_option('future.no_silent_downcasting', True)
-import dataframe_image as dfi
 from sklearn.preprocessing import MinMaxScaler
 
 def exercise1():
@@ -74,7 +73,6 @@ def exercise2():
 def exercise3():
     df = pd.read_csv(os.path.join(DATA_OUTPUTS_FILE_PATH,'data','spaceship_titanic','train.csv'))
     df_head = df.head(5)
-    dfi.export(df_head, os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise3_1.png'))
 
     numerical_features = ['Age', 'RoomService','FoodCourt','ShoppingMall', 'Spa', 'VRDeck']
     categorical_features = ['HomePlanet','CryoSleep','Destination','VIP']
@@ -105,7 +103,6 @@ def exercise3():
     df_processed[target_column] = df[target_column].astype(int) 
     
     df_processed_head = df_processed.head(5)
-    dfi.export(df_processed_head, os.path.join(IMAGES_OUTPUTS_FILE_PATH,'data','exercise3_2.png'))
 
     fig, axes = plt.subplots(2, len(numerical_features), figsize=(20, 8))
     for i, col in enumerate(numerical_features):

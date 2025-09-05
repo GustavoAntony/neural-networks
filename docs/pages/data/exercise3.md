@@ -71,6 +71,10 @@ The df.info() and df.isnull().sum() outputs provide a critical initial look at t
 
 **Handling Special Columns**
 
+- **Name and PassengerId**: These are unique identifiers that have no predictive power for the model. We drop them to prevent the model from memorizing individual records, which would lead to overfitting.
+
+- **Cabin**: The cabin feature is structured as Deck/Num/Side. The Deck and Side (P for Port, S for Starboard) likely hold valuable information about the passenger's location, which could influence their outcome. The Num is a unique identifier, similar to a name or ID, and is not useful for prediction, so we can ignore it. We use a regular expression to extract the Deck and Side into two new categorical columns before dropping the original Cabin column.
+
 ``` py
 df.drop(columns=['Name', 'PassengerId'], inplace=True)
 df[['Cabin_Deck', 'Cabin_Side']] = df['Cabin'].str.extract(r'([A-Z]+)\/\d+\/([A-Z]+)')
@@ -80,9 +84,11 @@ categorical_features.append('Cabin_Side')
 categorical_features.append('Cabin_Deck')
 ```
 
-- **Name and PassengerId**: These are unique identifiers that have no predictive power for the model. We drop them to prevent the model from memorizing individual records, which would lead to overfitting.
+**Imputing Missing Values**
 
-- **Cabin**: The cabin feature is structured as Deck/Num/Side. The Deck and Side (P for Port, S for Starboard) likely hold valuable information about the passenger's location, which could influence their outcome. The Num is a unique identifier, similar to a name or ID, and is not useful for prediction, so we can ignore it. We use a regular expression to extract the Deck and Side into two new categorical columns before dropping the original Cabin column.
+- **Numerical Features**: Missing values in numerical columns (Age, RoomService, etc.) are filled with the median. The median is used instead of the mean because it is less sensitive to outliers, ensuring that a few extreme values do not distort the central tendency of the data.
+
+- **Categorical Features**: Missing values in categorical columns are filled with the mode (the most frequent value). This is a simple and effective strategy that preserves the original distribution of each category.
 
 ``` py
 for col in numerical_features:
@@ -91,12 +97,11 @@ for col in categorical_features:
     df[col] = df[col].fillna(df[col].mode()[0])
 ```
 
-**Imputing Missing Values**
+**Feature Engineering and Scaling**
 
-- **Numerical Features**: Missing values in numerical columns (Age, RoomService, etc.) are filled with the median. The median is used instead of the mean because it is less sensitive to outliers, ensuring that a few extreme values do not distort the central tendency of the data.
+- **Encoding Categorical Features**: Machine learning algorithms require numerical input. We use One-Hot Encoding to convert categorical features (HomePlanet, Cabin_Deck, etc.) into a binary format. This creates a new column for each category, with a value of 1 for the relevant category and 0 otherwise. The drop_first=True argument prevents multicollinearity by dropping one of the generated columns.
 
-- **Categorical Features**: Missing values in categorical columns are filled with the mode (the most frequent value). This is a simple and effective strategy that preserves the original distribution of each category.
-
+- **Scaling Numerical Features**: Features with different ranges can bias a model. We use Min-Max Scaling to transform all numerical features to a common range of [-1, 1]. This ensures that each feature contributes equally to the model, preventing features with large values from dominating the learning process.
 
 ``` py
 df_encoded = pd.get_dummies(df[categorical_features], drop_first=True)
@@ -107,24 +112,22 @@ scaler = MinMaxScaler(feature_range=(-1, 1))
 df_scaled = pd.DataFrame(scaler.fit_transform(df[numerical_features]), columns=numerical_features)
 ```
 
-**Feature Engineering and Scaling**
+**Final Data Assembly**
 
-- **Encoding Categorical Features**: Machine learning algorithms require numerical input. We use One-Hot Encoding to convert categorical features (HomePlanet, Cabin_Deck, etc.) into a binary format. This creates a new column for each category, with a value of 1 for the relevant category and 0 otherwise. The drop_first=True argument prevents multicollinearity by dropping one of the generated columns.
-
-- **Scaling Numerical Features**: Features with different ranges can bias a model. We use Min-Max Scaling to transform all numerical features to a common range of [-1, 1]. This ensures that each feature contributes equally to the model, preventing features with large values from dominating the learning process.
+The final step is to combine the scaled numerical features, the one-hot encoded categorical features, and the target variable (Transported) into a single processed DataFrame ready for model training.
 
 ``` py
 df_processed = pd.concat([df_scaled, df_encoded], axis=1)
 df_processed[target_column] = df[target_column].astype(int) 
 ```
 
-**Final Data Assembly**
-
-The final step is to combine the scaled numerical features, the one-hot encoded categorical features, and the target variable (Transported) into a single processed DataFrame ready for model training.
-
 ![DF Processed](../../assets/images/data/exercise3_2.png)
 
 ## Visualize the Results
+
+Histograms are used to visualize the distribution of numerical features before and after scaling. The plots clearly demonstrate the effect of Min-Max Scaling, which normalizes the data to the [-1, 1] range, aligning all features on a consistent scale. This visual confirmation is crucial for validating that the preprocessing steps were performed correctly.
+
+The histograms show how the distributions of features like Age and RoomService are transformed from their original ranges to the [-1, 1] range. This normalization helps to ensure that each feature contributes equally to the model training process, improving convergence speed and overall model performance.
 
 ``` py
 fig, axes = plt.subplots(2, len(numerical_features), figsize=(20, 8))
@@ -141,10 +144,6 @@ plt.close()
 ```
 
 ![Image3](../../assets/images/data/exercise3_4.png)
-
-Histograms are used to visualize the distribution of numerical features before and after scaling. The plots clearly demonstrate the effect of Min-Max Scaling, which normalizes the data to the [-1, 1] range, aligning all features on a consistent scale. This visual confirmation is crucial for validating that the preprocessing steps were performed correctly.
-
-The histograms show how the distributions of features like Age and RoomService are transformed from their original ranges to the [-1, 1] range. This normalization helps to ensure that each feature contributes equally to the model training process, improving convergence speed and overall model performance.
 
 ## Final Code: Integrated Solution
 

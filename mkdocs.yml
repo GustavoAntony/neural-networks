@@ -141,5 +141,10 @@ nav:
           pages/data/exercise2.md
       - Preparing Real-World Data for a Neural Network:
           pages/data/exercise3.md
+    - 2. Perceptron:
+      - Perceptron and Linearly Separable Data:
+          pages/perceptron/exercise1.md
+      - Perceptron and Not Fully Linearly Separable Data:
+          pages/perceptron/exercise2.md
 
         

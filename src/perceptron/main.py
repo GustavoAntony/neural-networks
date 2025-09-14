@@ -57,12 +57,14 @@ def exercise1():
     save_plot_data(X, y, PARAMS_EX1,'exercise1_1.png')
     perceptron = Perceptron('ex1')
     perceptron.train(X, y)
+    print(f'Final training weights: {perceptron.w}, and Bias: {perceptron.b}')
 
 def exercise2():
     X2, y2 = generate_data(params=PARAMS_EX2, n_samples=1000)
     save_plot_data(X2, y2, PARAMS_EX2, 'exercise2_1.png')
     perceptron = Perceptron('ex2')
     perceptron.train(X2,y2)
+    print(f'Final training weights: {perceptron.w}, and Bias: {perceptron.b}')
 
 def main():
     exercise1()

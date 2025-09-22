@@ -102,6 +102,8 @@ accuracy = accuracy_score(y_test_labels, y_test_pred_labels)
 print(f"Test Accuracy (Exercise 3): {accuracy * 100:.2f}%")
 ```
 
+**Test Accuracy (Exercise 3): 62.00%**
+
 ### Training Accuracy Plot
 
 ```python
@@ -163,6 +165,8 @@ y_test_pred_labels = np.argmax(y_test_pred, axis=1)
 accuracy = accuracy_score(y_test_labels, y_test_pred_labels)
 print(f"Test Accuracy (Exercise 4): {accuracy * 100:.2f}%")
 ```
+
+**Test Accuracy (Exercise 4): 68.67%**
 
 ### Training Accuracy Plot
 

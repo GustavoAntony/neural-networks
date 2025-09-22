@@ -54,6 +54,8 @@ accuracy = accuracy_score(y_test, y_test_pred_classes)
 print(f"Test Accuracy: {accuracy * 100:.2f}%")
 ```
 
+**Test Accuracy: 82.50%**
+
 ## Training Accuracy Plot
 
 ```python

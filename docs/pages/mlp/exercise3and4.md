@@ -1,6 +1,8 @@
-# Multi-Class Classification with MLP from Scratch
+This notebook demonstrates how to use a Multi-Layer Perceptron (MLP) to solve a multi-class classification problem. The process includes generating synthetic data, visualizing it, defining and training the model, evaluating performance, and visualizing results for two different MLP architectures.
 
 ## Data Generation
+
+We generate synthetic data for three classes, each with different cluster structures. The data is one-hot encoded and split into training and test sets.
 
 ```python
 def generate_multiclass_data():
@@ -50,6 +52,8 @@ X_train, X_test, y_train, y_test, y_test_labels = generate_multiclass_data()
 
 ## Data Visualization (PCA)
 
+To visualize high-dimensional data, we use PCA to project it into 2D. This helps us see the class separation and structure before training.
+
 ```python
 from sklearn.decomposition import PCA
 pca = PCA(n_components=2)
@@ -67,7 +71,11 @@ plt.close()
 
 ## Exercise 3: MLP with 1 Hidden Layer
 
+In this part, we define and train an MLP with a single hidden layer to classify the data into three classes.
+
 ### Model Initialization
+
+We set up the MLP architecture for multi-class classification with one hidden layer.
 
 ```python
 input_size = X_train.shape[1]
@@ -78,6 +86,8 @@ mlp = MLP(input_size, hidden_sizes, output_size, learning_rate, task='multiclass
 ```
 
 ### Training and Accuracy per Epoch
+
+The model is trained for 2000 epochs. We track the training accuracy at each epoch to monitor learning progress.
 
 ```python
 train_accuracies = []
@@ -95,6 +105,8 @@ for epoch in range(epochs):
 
 ### Test Evaluation
 
+After training, we evaluate the model on the test set to see how well it generalizes to unseen data.
+
 ```python
 y_test_pred = mlp.forward(X_test)
 y_test_pred_labels = np.argmax(y_test_pred, axis=1)
@@ -105,6 +117,8 @@ print(f"Test Accuracy (Exercise 3): {accuracy * 100:.2f}%")
 **Test Accuracy (Exercise 3): 62.00%**
 
 ### Training Accuracy Plot
+
+The plot below shows the evolution of training accuracy over epochs, which helps to visualize the learning process and convergence.
 
 ```python
 plt.figure(figsize=(8,4))
@@ -121,6 +135,8 @@ plt.close()
 
 ### Decision Boundary (PCA)
 
+We visualize the decision boundaries learned by the MLP in the PCA-reduced space, showing how the model separates the classes.
+
 ```python
 plot_decision_boundary_pca(mlp, X_test, y_test, pca, 'exercise3_decision_boundary_pca.png')
 ```
@@ -131,7 +147,11 @@ plot_decision_boundary_pca(mlp, X_test, y_test, pca, 'exercise3_decision_boundar
 
 ## Exercise 4: MLP with 2 Hidden Layers
 
+Now, we repeat the process with an MLP that has two hidden layers, which can capture more complex patterns in the data.
+
 ### Model Initialization
+
+We set up the MLP architecture for multi-class classification with two hidden layers.
 
 ```python
 input_size = X_train.shape[1]
@@ -142,6 +162,8 @@ mlp = MLP(input_size, hidden_sizes, output_size, learning_rate, task='multiclass
 ```
 
 ### Training and Accuracy per Epoch
+
+Again, we train for 2000 epochs and track the training accuracy.
 
 ```python
 train_accuracies = []
@@ -159,6 +181,8 @@ for epoch in range(epochs):
 
 ### Test Evaluation
 
+We evaluate the two-hidden-layer MLP on the test set to compare its performance with the previous model.
+
 ```python
 y_test_pred = mlp.forward(X_test)
 y_test_pred_labels = np.argmax(y_test_pred, axis=1)
@@ -169,6 +193,8 @@ print(f"Test Accuracy (Exercise 4): {accuracy * 100:.2f}%")
 **Test Accuracy (Exercise 4): 68.67%**
 
 ### Training Accuracy Plot
+
+The following plot shows the training accuracy over epochs for the two-hidden-layer MLP.
 
 ```python
 plt.figure(figsize=(8,4))
@@ -184,6 +210,8 @@ plt.close()
 ![Training Accuracy 4](../../assets/images/mlp/exercise4_accuracy.png)
 
 ### Decision Boundary (PCA)
+
+Finally, we visualize the decision boundaries for the two-hidden-layer MLP in the PCA-reduced space.
 
 ```python
 plot_decision_boundary_pca(mlp, X_test, y_test, pca, 'exercise4_decision_boundary_pca.png')

@@ -128,6 +128,7 @@ def plot_decision_boundary(model, X, y, image_name):
     #save image
 
     plt.savefig(os.path.join(IMAGES_OUTPUTS_FILE_PATH,'mlp',image_name))
+    plt.close()
 
 def plot_decision_boundary_pca(model, X, y, pca, image_name):
     """
@@ -157,6 +158,7 @@ def plot_decision_boundary_pca(model, X, y, pca, image_name):
     plt.xlabel("PCA 1")
     plt.ylabel("PCA 2")
     plt.savefig(os.path.join(IMAGES_OUTPUTS_FILE_PATH,'mlp',image_name))
+    plt.close()
 
 def exercise_2():
     print("--- Executando Exercício 2: Classificação Binária ---")

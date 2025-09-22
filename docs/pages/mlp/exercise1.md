@@ -1,5 +1,3 @@
-## Manual Calculation of MLP Steps
-
 This page details the step-by-step manual calculation of a single forward and backward pass for a simple Multi-Layer Perceptron (MLP). The network consists of two input features, one hidden layer with two neurons, and one output neuron.
 
 ## Network and Data Specifications

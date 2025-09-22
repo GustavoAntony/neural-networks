@@ -10,7 +10,7 @@ This page details the step-by-step manual calculation of a single forward and ba
 * **Output Layer Bias ($b^{(2)}$)**: \(0.2\)
 * **Activation Function**: Hyperbolic tangent (tanh) for both layers.
 * **Loss Function**: Mean Squared Error (MSE), \(L = \frac{1}{N}(y - \hat{y})^2\).
-* **Learning Rate ($\eta$)**: \(0.1\)
+* **Learning Rate ($\eta$)**: \(0.3\)
 
 ---
 
@@ -188,16 +188,16 @@ $$
 $$
 W^{(2)}_{new} =
 \begin{bmatrix}0.5 & -0.3\end{bmatrix}
-- 0.1\cdot\begin{bmatrix}-0.2886 & 0.1950\end{bmatrix}
+- 0.3\cdot\begin{bmatrix}-0.2886 & 0.1950\end{bmatrix}
+= \begin{bmatrix}0.5 & -0.3\end{bmatrix}
+- \begin{bmatrix}-0.0866 & 0.0585\end{bmatrix}
 \approx
-\begin{bmatrix}0.5289 & -0.3195\end{bmatrix}
+\begin{bmatrix}0.5866 & -0.3585\end{bmatrix}
 $$
 
 * **Bias**
 
-$$
-b^{(2)}_{new} = 0.2 - 0.1\cdot(-1.0948) \approx 0.3095
-$$
+$$b^{(2)}_{new} = 0.2 - 0.3\cdot(-1.0948) = 0.2 + 0.3284 \approx 0.5284$$
 
 ---
 
@@ -211,15 +211,23 @@ W^{(1)}_{new} =
 0.3 & -0.1 \\
 0.2 & 0.4
 \end{bmatrix}
-+ (-0.1)\cdot
+- 0.3\cdot
 \begin{bmatrix}
 -0.2547 & 0.1019 \\
 0.1590 & -0.0636
 \end{bmatrix}
+= \begin{bmatrix}
+0.3 & -0.1 \\
+0.2 & 0.4
+\end{bmatrix}
+- \begin{bmatrix}
+-0.0764 & 0.0306 \\
+0.0477 & -0.0191
+\end{bmatrix}
 \approx
 \begin{bmatrix}
-0.3255 & -0.1102 \\
-0.1841 & 0.4064
+0.3764 & -0.1306 \\
+0.1523 & 0.4191
 \end{bmatrix}
 $$
 
@@ -228,10 +236,12 @@ $$
 $$
 b^{(1)}_{new} =
 \begin{bmatrix}0.1 \\ -0.2\end{bmatrix}
-- 0.1\cdot
+- 0.3\cdot
 \begin{bmatrix}-0.5094 \\ 0.3180\end{bmatrix}
+= \begin{bmatrix}0.1 \\ -0.2\end{bmatrix}
+- \begin{bmatrix}-0.1528 \\ 0.0954\end{bmatrix}
 \approx
-\begin{bmatrix}0.1509 \\ -0.2318\end{bmatrix}
+\begin{bmatrix}0.2528 \\ -0.2954\end{bmatrix}
 $$
 
 ---

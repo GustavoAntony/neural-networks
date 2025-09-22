@@ -146,5 +146,14 @@ nav:
           pages/perceptron/exercise1.md
       - Perceptron and Not Fully Linearly Separable Data:
           pages/perceptron/exercise2.md
+    - 3. MLP:
+      - MLP Implementation:
+          pages/mlp/mlp.md
+      - Manual Calculation of MLP Steps:
+          pages/mlp/exercise1.md
+      - Binary Classification with Synthetic Data and Scratch MLP:
+          pages/mlp/exercise2.md
+      - Multi-Class Classification with Synthetic Data and Reusable MLP:
+          pages/mlp/exercise3and4.md
 
         

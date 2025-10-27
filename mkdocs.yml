@@ -155,5 +155,9 @@ nav:
           pages/mlp/exercise2.md
       - Multi-Class Classification with Synthetic Data and Reusable MLP:
           pages/mlp/exercise3and4.md
+    - 4. VAE:
+      - VAE Implementation:
+          pages/vae/vae.md
+    
 
         
